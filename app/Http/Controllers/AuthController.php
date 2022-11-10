@@ -2,108 +2,127 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Auth;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Validator;
+use App\Models\Auth;
+use App\Models\Layouts;
 
-class AuthController extends Controller
+class authController extends Controller
 {
-    public function index(Request $request)
-    {
-        return view('user.login');
-    }
-
-    public function redirectToIndex()
-    {
-        return Redirect(route('Login'));
-    }
-    
-    public function signup(Request $request)
-    {
-        $validate = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
-        ]);
-
-        if ($validate->fails()) {
-            return response()->json([
-                'message' => $validate->errors(),
-                'status' => 'validation-error'
-            ], 401);
-        }
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'api_token' => Str::random(80),
-        ]);
-        $user->save();
-        
-        $token = Str::random(80);
-
-        $user->forceFill([
-            'api_token' => hash('sha256', $token),
-        ])->save();
-
-        $credentials = request(['email', 'password']);
-        
-        if(!Auth::guard('users')->attempt($credentials))
-            return response()->json([
-                'message' => 'Invalid email or password',
-                'status' => 'error'
-            ], 401);
-        
-        return response()->json([
-            'message' => $user->api_token,
-            'status' => 'success'
-        ], 201);
-    }
-  
+    //
     public function login(Request $request)
     {
-        $validate = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
-
-        if ($validate->fails()) {
-            return response()->json([
-                'message' => $validate->errors(),
-                'status' => 'validation-error'
-            ], 401);
+        $email = $request->email;
+        $password = $request->password;
+        $check = Auth::where("email",$email)->where("password",md5($password))->get();
+        if (count($check)) {
+            $source = json_encode(["email" => $check[0]->email,'level' => $check[0]->level, "password" => $check[0]->password]);
+            $result = md5($source);
+            return response()->json(['success' => 1,"login" => $check[0],'token' => $result]);
+        }else{
+            $checkEmail = Auth::where("email",$email)->get();
+            if (count($checkEmail)) {
+                return response()->json(['success' => 0,"message" => "Password is not match"]);   
+            }
+            return response()->json(['success' => 0,"message" => "Email is not exist"]);
+        }
+    }
+    public function register(Request $request)
+    {
+        $email = $request->email;
+        $password = $request->password;
+        $fullname = $request->fullname;
+        $checkEmail = Auth::where("email",$email)->get();
+        if (count($checkEmail)) {
+            return response()->json(['success' => 0,"message" => "Email is already exist."]);   
+        }
+        $access = [];
+        $layouts = Layouts::get();
+        for ($i=0; $i < count($layouts); $i++) { 
+            $temp = ["custom_access" => 0, "mass_access" => 0, "auto_access" => 0 ,"layout" => $layouts[$i]->id, "layout_access" => 0];
+            array_push($access,$temp);
         }
 
-        $credentials = request(['email', 'password']);
-        
-        if(!Auth::guard('users')->attempt($credentials))
-            return response()->json([
-                'message' => 'Invalid email or password',
-                'status' => 'error'
-            ], 401);
-        $user = $request->user();
-        
-        return response()->json([
-            'message' => $user->api_token,
-            'status' => 'success'
-        ], 201);
-    }
-  
-    public function logout(Request $request)
-    {
-    }
-  
-    
-    public function user(Request $request)
-    {
-        return response()->json([
-            'message' => $request->user(),
-            'status' => 'success'
+        $in = Auth::insert([
+            'fullname' => $fullname,
+            'password' => md5($password),
+            'email' => $email,
+            "access" => json_encode($access)
         ]);
+        return response()->json(['success' => 1, "message" =>"You have been successfully registered."]);
+    }
+
+    public function getUsers(Request $request)
+    {
+        $users = Auth::get();
+        return response()->json($users);
+    }
+
+    public function setAccess(Request $request)
+    {
+        $access = $request->access;
+        $userId = $request->userId;
+        $layoutId = $request->layoutId;
+        $userInfo = Auth::where("id",$userId)->get();
+        $userAccess = json_decode($userInfo[0]->access);
+        $newAccess = [];
+        $cnt = 0;
+        for ($i=0; $i < count($userAccess); $i++) { 
+            if ($userAccess[$i]->layout == $layoutId) {
+                $cnt ++;
+                array_push($newAccess,$access);
+            }else{
+                array_push($newAccess,$userAccess[$i]);
+            }
+        }
+        if ($cnt == 0) {
+            array_push($newAccess,$access);
+        }
+
+        $up = Auth::where("id",$userId)->update(['access' => json_encode($newAccess)]);
+        return response()->json(['message' => "success"]);
+    }
+
+    public function checkToken(Request $request)
+    {
+        $allusers = Auth::get();
+        $token = $request->token;
+        $flag = 0;
+        $userData = [];
+        for ($i=0; $i < count($allusers); $i++) { 
+            $cont = ["email" => $allusers[$i]->email,'level' => $allusers[$i]->level, "password" => $allusers[$i]->password];
+            $content = json_encode($cont);
+            if (md5($content) == $token) {
+                $flag = 1;
+                $userData = $allusers[$i];
+            }
+        }
+        if ($flag == 1) {
+            return response()->json(['success' => 1, "user" => $userData]);
+        }else{
+            return response()->json(['success' => 0]);
+        }
+    }
+    public function setPassword(Request $request)
+    {
+        $email = $request->email;
+        $password = $request->password;
+        $newpassword = $request->newpassword;
+        // dd($email,$password,$newpassword);
+        $check = Auth::where("email",$email)->where("password",md5($password))->get();
+        if (count($check)) {
+            $newmdapassword = md5($newpassword);
+            $up = Auth::where("email",$email)->update([
+                "password" => $newmdapassword
+            ]);
+            $source = json_encode(["email" => $check[0]->email,'level' => $check[0]->level, "password" => $newmdapassword]);
+            $result = md5($source);
+            return response()->json(['success' => 1,"login" => $check[0],'token' => $result]);
+        }else{
+            $checkEmail = Auth::where("email",$email)->get();
+            if (count($checkEmail)) {
+                return response()->json(['success' => 0,"message" => "Password is not match"]);   
+            }
+            return response()->json(['success' => 0,"message" => "Email is not exist"]);
+        }
     }
 }

@@ -1,56 +1,64 @@
-<p><h1 align="center">React Laravel</h1></p>
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
-    <a href="https://laravel.com/"><img src="https://img.shields.io/badge/laravel-7.5.2-orange" alt="laravel 7.5.2"></a>
-    <a href="https://reactjs.org/"><img src="https://img.shields.io/badge/react-16.13.1-blue" alt="react 16.13.1"></a>
-    <a href="https://react-redux.js.org/"><img src="https://img.shields.io/static/v1?label=redux&message=7.2&color=blueviolet" alt="redux 7.2"></a>
-    <a href="https://reacttraining.com/react-router/"><img src="https://img.shields.io/badge/react router-5.1.2-success" alt="react router 5.1.2"></a>
-    <a href="https://arifszn.github.io/"><img src="https://img.shields.io/badge/maintainer-arifszn-critical" alt="maintainer arifszn"></a>
+<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-# About #
+## About Laravel
 
-A crud based laravel app to learn how to integrate react and other important react feature in laravel.
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-## Demo ##
-[https://szn-react-laravel.herokuapp.com](https://szn-react-laravel.herokuapp.com)
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-## Topics Convered ##
-- React
-- React Redux
-- React Router
-- React Hooks
-- React Class Component VS Functional Component
-- React validation
-- Laravel Api
-- Laravel Token Api
-- Laravel Manual Pagination
-- Laravel Crud
-- Sass
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Screenshots ##
-![alt text](https://raw.githubusercontent.com/arifszn/react-laravel/master/public/assets/images/screenshots/1.png)
-<br />
-<br />
+## Learning Laravel
 
-***
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-![alt text](https://raw.githubusercontent.com/arifszn/react-laravel/master/public/assets/images/screenshots/2.png)
-<br />
-<br />
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Installation ##
-- Run ```git clone https://github.com/arifszn/react-laravel.git```
-- Run ```cd react-laravel```
-- Run ```composer install```
-- Setup database
-- Run ```cp .env.example .env```
-- Run ```php artisan key:generate```
-- Provide db name, username and password in .env
-- Run ```php artisan migrate --seed```
+## Laravel Sponsors
 
-## Author ##
-Ariful Alam (https://arifszn.github.io)
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-***
-> Feel free to create an issue if you face any problem or need any help.
+### Premium Partners
+
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Cubet Techno Labs](https://cubettech.com)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[Many](https://www.many.co.uk)**
+- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
+- **[DevSquad](https://devsquad.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
+- **[OP.GG](https://op.gg)**
+- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
+- **[Lendio](https://lendio.com)**
+
+## Contributing
+
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+
+## Code of Conduct
+
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+
+## Security Vulnerabilities
+
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+
+## License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
